@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Riwayat Log Data - Dashboard IoT</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        th { background-color: #e5e7eb; } /* gray-200 */
+        tr:nth-child(even) { background-color: #f9fafb; } /* gray-50 */
+    </style>
+</head>
+<body>
+    <div class="container mx-auto p-4 sm:p-8">
+        <header class="mb-6">
+            <h1 class="text-4xl font-bold text-gray-700">Riwayat Log Data Sensor</h1>
+            <p class="text-gray-500 mt-1">Semua data yang tercatat di server.</p>
+        </header>
+
+        <div class="mb-6 flex flex-wrap gap-4">
+            <a href="/" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                <i class="fa-solid fa-arrow-left"></i> Kembali ke Dashboard
+            </a>
+            <a href="/download_csv" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                <i class="fa-solid fa-download"></i> Unduh File CSV
+            </a>
+            <a href="/reset_log" onclick="return confirm('Anda yakin ingin mereset semua data log di tabel? Aksi ini tidak dapat dibatalkan.');" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                <i class="fa-solid fa-undo"></i> Reset Log
+            </a>
+            <a href="/delete_log_file" onclick="return confirm('PERINGATAN: Anda akan menghapus file log permanen. Lanjutkan?');" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md">
+                <i class="fa-solid fa-trash-can"></i> Hapus File Log
+            </a>
+        </div>
+
+        <div class="bg-white shadow-md rounded-lg overflow-x-auto">
+            <table class="min-w-full text-sm text-left text-gray-700">
+                <thead class="text-xs text-gray-800 uppercase">
+                    <tr>
+                        <th scope="col" class="px-6 py-3">Waktu Server</th>
+                        <th scope="col" class="px-6 py-3">Device ID</th>
+                        <th scope="col" class="px-6 py-3">Suhu</th>
+                        <th scope="col" class="px-6 py-3">Kelembapan</th>
+                        <th scope="col" class="px-6 py-3">Gerakan</th>
+                        <th scope="col" class="px-6 py-3">Waktu Perangkat</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if history_data %}
+                        {% for row in history_data %}
+                        <tr class="border-b">
+                            <td class="px-6 py-4">{{ row.server_timestamp }}</td>
+                            <td class="px-6 py-4 font-medium text-gray-900">{{ row.deviceId }}</td>
+                            <td class="px-6 py-4">{{ row.temperature_celsius }} °C</td>
+                            <td class="px-6 py-4">{{ row.humidity_percent }} %</td>
+                            <td class="px-6 py-4">
+                                {% if row.motion_detected == 'True' %}
+                                    <span class="text-red-600 font-bold">TERDETEKSI</span>
+                                {% else %}
+                                    <span class="text-green-600">Aman</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4">{{ row.device_timestamp }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-10 text-gray-500">
+                                Belum ada data yang tercatat. Coba simulasikan data dari dashboard utama.
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
