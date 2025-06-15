@@ -13,7 +13,7 @@ app = Flask(__name__, template_folder=template_dir)
 # ============================================================================
 
 # ================= FIX 2: Path Penyimpanan CSV untuk Vercel =================
-# Vercel hanya mengizinkan penulisan file di folder sementara '/tmp'.
+    # Vercel hanya mengizinkan penulisan file di folder sementara '/tmp'.
 # Jika tidak diubah, logging ke CSV akan gagal.
 CSV_FILE = '/tmp/sensor_log.csv'
 # ============================================================================
